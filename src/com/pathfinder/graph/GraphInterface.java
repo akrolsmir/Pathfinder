@@ -46,6 +46,8 @@ public interface GraphInterface {
 	 */
 	void addEdge(Vertex v1, Vertex v2) throws VertexNotInGraphException;
 	
+	void addEdge(Vertex v1, Vertex v2, double weight) throws VertexNotInGraphException;
+	
 	/**
 	 * Removes the edge (v1, v2) in the graph
 	 * @param v1 -- The first vertex the edge is incident to

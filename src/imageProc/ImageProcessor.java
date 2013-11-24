@@ -1,21 +1,69 @@
 package imageProc;
 
-import org.opencv.core.*;
-import org.opencv.imgproc.*;
+import java.util.HashMap;
+
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.Point;
+import org.opencv.imgproc.Imgproc;
+
+import com.pathfinder.graph.Graph;
+import com.pathfinder.graph.Vertex;
 
 public class ImageProcessor {
-	static double low_thresh = 0;
-	static double high_thresh = 100;
+	static int low_thresh = 0;
+	static int high_thresh = 100;
+	static double rho = 100;
+	static double theta = 180;
+
+	public static Graph process(Mat image) {
+		Mat edgeDetect = Mat.zeros(image.size(), image.type());
+		MatOfPoint lines = new MatOfPoint();
+		Imgproc.Canny(image, edgeDetect, low_thresh, high_thresh);
+		Imgproc.HoughLinesP(edgeDetect, lines, 1, Math.PI/180, 100, 0, 0 );	
+
+		return exportGraph(lines);
+	}
 	
-	public static Graph process(Mat image){
-		Mat edges = Mat.zeros(image.size(), image.type());
-		Mat lines = null;
-		Imgproc.Canny(image, edges, low_thresh, high_thresh);
-		Imgproc.HoughLinesP(edges, lines, rho, theta, low_thresh);
+	private static Graph exportGraph(MatOfPoint lines){
+		HashMap<PixelLoc, Vertex> vertices = new HashMap<PixelLoc, Vertex>();
+		Graph g = new Graph();
+		Point[] edges = lines.toArray();
+		for (int i = 0; i < edges.length; i++) {
+			Point pt1 = new Point(), pt2 = new Point();
+			double a = Math.cos(theta), b = Math.sin(theta);
+			double x0 = a * rho, y0 = b * rho;
+			pt1.x = Math.round(x0 + 1000 * (-b));
+			pt1.y = Math.round(y0 + 1000 * (a));
+			pt2.x = Math.round(x0 - 1000 * (-b));
+			pt2.y = Math.round(y0 - 1000 * (a));
+			
+			PixelLoc pixel1 = new PixelLoc(pt1);
+			PixelLoc pixel2 = new PixelLoc(pt2);
+			Vertex v1 = new Vertex(pt1.x, pt1.y);
+			Vertex v2 = new Vertex(pt2.x, pt2.y);
+			
+			if(!vertices.containsKey(pixel1)){
+				vertices.put(pixel1, v1);
+				g.addVertex(v1);
+			}
+			
+			if(!vertices.containsKey(pixel2)){
+				vertices.put(pixel2, v2);
+				g.addVertex(v2);
+			}
+			v1 = vertices.get(pixel1); v2 = vertices.get(pixel2);
+			g.addEdge(v1, v2, dist(pixel1, pixel2));
+			
+		}
 		
-		
-		
-		return null;
+		return g;
+	}
+	
+	static double dist(PixelLoc p1, PixelLoc p2){
+		double sqXDist = Math.pow(p1.x - p2.x, 2);
+		double sqYDist = Math.pow(p1.y - p2.y, 2);
+		return Math.sqrt(sqXDist + sqYDist);
 	}
 
 }
