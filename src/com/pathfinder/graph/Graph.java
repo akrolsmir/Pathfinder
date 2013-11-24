@@ -98,8 +98,39 @@ public class Graph implements GraphInterface{
 		while(curr != start){
 			path.add(0, curr.getPrev());
 			curr = curr.getPrev();
+			if (curr == null){
+				return null;
+			}
 		}
 		return path;
+	}
+	
+	public Iterable<Vertex> computePathToGraph(Loc start, Vertex end)
+			throws GraphException {
+		Pair<Vertex, Double> close = closestVertexToPath(start);
+		addVertex(close.getLeft());
+		addEdge(close.getLeft(), end, close.getRight());
+		try{
+			ArrayList<Vertex> path = computePath(close.getLeft(), end);
+			removeVertex(close.getLeft());
+			return path;
+		} catch(GraphException g){
+			throw g;
+		}
+	}
+
+	public Pair<Vertex, Double> closestVertexToPath(Loc pos) {
+		double dist = Double.MAX_VALUE;
+		Vertex res = null;
+		for (Vertex v : vertices){
+			//might do some nearest neighbors thing (eg. 10x10 square)
+			double temp = v.getLoc().computeDist(pos);
+			if (temp < dist){
+				res = v;
+				dist = temp;
+			}
+		}
+		return new Pair<Vertex, Double>(res, dist);
 	}
 
 
@@ -169,6 +200,7 @@ public class Graph implements GraphInterface{
 		}
 		return "Vertices:\n" + verts + "Edges:\n" + edges;
 	}
+	
 }
 
 class CompareDist implements Comparator<Vertex>{

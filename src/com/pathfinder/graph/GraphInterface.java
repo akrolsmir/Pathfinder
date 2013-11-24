@@ -14,10 +14,26 @@ public interface GraphInterface {
 	 * Finds the shortest path between the start and end vertices.
 	 * @param start -- The starting node
 	 * @param end -- The target node
-	 * @return A list representing the desired path, or NULL of the vertices are not connected.
+	 * @return A list representing the desired path, or NULL if the vertices are not connected.
 	 * @throws GraphException if start and end are not in the graph
 	 */
 	Iterable<Vertex> computePath(Vertex start, Vertex end) throws GraphException;
+	
+	/**
+	 * Finds the shortest path between the start and end vertices, given that start is not in the graph
+	 * @param start -- The starting node
+	 * @param end -- The target node
+	 * @return A list representing the desired path, or NULL if the vertices are not connected.
+	 * @throws GraphException if end is not in the graph
+	 */
+	Iterable<Vertex> computePathToGraph(Loc start, Vertex end) throws GraphException;
+	
+	/**
+	 * Finds the closest vertex to pos in the graph
+	 * @param pos -- The position not on the graph.
+	 * @return closest vertex to pos in the graph.
+	 */
+	Pair<Vertex, Double> closestVertexToPath(Loc pos);
 	
 	/**
 	 * adds a single unconnected vertex v 

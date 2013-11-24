@@ -52,6 +52,10 @@ public class Loc {
 		return longitude;
 	}
 	
+	public double computeDist(Loc loc){
+		return Math.sqrt(Math.pow(this.getLatitude() - loc.getLatitude(), 2) + Math.pow(this.getLongitude() - loc.getLongitude(), 2));
+	}
+	
 	public String toString(){
 		return "(" + latitude + " " + longitude + ")";
 	}
