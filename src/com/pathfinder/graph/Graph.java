@@ -59,8 +59,11 @@ public class Graph implements GraphInterface{
 		//vertexInfo will store for each vertex v the pair (dist(v), prev(v))
 		HashMap<Vertex, Pair<Double, Vertex>> vertexInfo = new HashMap<Vertex, Pair<Double, Vertex>>();
 		for (Vertex v : vertices){
-			double dist = MAX_VALUE;
+			Double dist = Double.MAX_VALUE;
+			Vertex prev = null;
+			vertexInfo.put(v, new Pair<Double, Vertex>(dist, prev));
 		}
+		//TODO
 		return new ArrayList<Vertex>();
 	}
 
