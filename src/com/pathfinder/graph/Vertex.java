@@ -26,6 +26,17 @@ public class Vertex {
 	 */
 	public Vertex(){
 		location = new Loc();
+		vertices = new HashMap<Vertex, Double>();
+	}
+	
+	/**
+	 * Construct an uncconected Vertex at (lat, lon)
+	 * @param lat -- The latitude of the vertex
+	 * @param lon -- The longitude of the vertex
+	 */
+	public Vertex(double lat, double lon){
+		location = new Loc(lat, lon);
+		vertices = new HashMap<Vertex, Double>();
 	}
 	
 	/**
@@ -198,5 +209,11 @@ public class Vertex {
 	//
 	public String toString(){
 		return location.toString();
+	}
+	
+	public int hashCode(){
+		//a bad hashcode please fix me please please please
+		//TODO
+		return (int)(location.getLatitude()*location.getLongitude());
 	}
 }

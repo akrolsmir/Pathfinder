@@ -14,10 +14,6 @@ public class TestGraph {
 	 * Test Constructors
 	 */
 	@Test
-	public void foo(){
-		fail("no");
-	}
-	@Test
 	public void testConstructorOne(){
 		Graph foo = new Graph();
 		assertTrue("Graph.vertices should be non-null", foo.getVertices() != null);
@@ -27,16 +23,11 @@ public class TestGraph {
 	public void testConstructorTwo(){
 		ArrayList<Vertex> verts = new ArrayList<Vertex>();
 		verts.add(new Vertex());
-		try{
-			verts.add(new Vertex(3, 4, null));
-			verts.add(new Vertex(1, 2, null));
-			verts.add(new Vertex(5.1, 2, null));
-			verts.add(new Vertex(99.243, 102.23, null));
-			verts.add(new Vertex(34, 643, null));
-			verts.add(new Vertex(.1, 102, null));
-		} catch (EdgeNotInGraphException e){
-			fail("Exception should not be caught");
-		}
+		verts.add(new Vertex(3, 4));
+		verts.add(new Vertex(1, 2));
+		verts.add(new Vertex(5.1, 2));
+		verts.add(new Vertex(99.243, 102.23));
+		verts.add(new Vertex(.1, 102));
 		Graph foo = new Graph(verts);
 		Iterator<Vertex> graphVerts = foo.getVertices();
 		assertTrue("Graph.vertices should be non-null", graphVerts != null);
