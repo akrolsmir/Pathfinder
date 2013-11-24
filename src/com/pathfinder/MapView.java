@@ -2,6 +2,7 @@ package com.pathfinder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -18,6 +19,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
+import com.pathfinder.graph.Graph;
 import com.pathfinder.graph.Loc;
 import com.pathfinder.graph.Vertex;
 import com.pathfinder.graph.exception.GraphException;
@@ -81,6 +83,54 @@ public class MapView extends View {
 		points.add(new Vertex(x, y));
 		//		points.add(x);
 		//		points.add(y);
+	}
+	
+	public void drawGraph(Graph g){
+		//save points
+		ArrayList<Vertex> temp = new ArrayList<Vertex>();
+		for(Vertex v : points){
+			temp.add(v);
+		}
+		points.clear();
+		Vertex start = g.getVertices().iterator().next();
+		if(start == null){
+			return;
+		} else {
+			for(Vertex v : g.getVertices()){
+				v.setVisited(false);
+			}
+			start.setVisited(true);
+			Stack<Vertex> S = new Stack<Vertex>();
+			S.push(start);
+			while(!S.empty()){
+				Vertex v = S.peek();
+				points.add(v);
+				for(Vertex u : v.getAdjacent()){
+					points.add(u);
+					if(!u.getVisited()){
+						boolean explored = true;
+						for(Vertex w : u.getAdjacent()){
+							if(!w.getVisited()){
+								explored = false;
+								break;
+							}
+						}
+						if(explored == false){
+							S.push(u);
+							S.push(u); //gets around always popping (so hacky)
+							break;
+						}
+						u.setVisited(true);
+					}
+					points.add(v);
+				}
+				S.pop();
+			}
+		}
+		//Restore points
+		for(Vertex v : temp){
+			points.add(v);
+		}
 	}
 
 	@Override

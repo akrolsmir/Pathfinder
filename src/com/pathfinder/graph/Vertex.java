@@ -192,7 +192,7 @@ public class Vertex {
 	 * 
 	 * @return the "visited" state of the vertex
 	 */
-	protected boolean getVisited(){
+	public boolean getVisited(){
 		return visited;
 	}
 	
@@ -200,7 +200,7 @@ public class Vertex {
 	 * Sets the "visited" state of this vertex to v
 	 * @param v -- the new "visited" state
 	 */
-	protected void setVisited(boolean v){
+	public void setVisited(boolean v){
 		visited = v;
 	}
 	

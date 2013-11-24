@@ -66,12 +66,11 @@ public class MainActivity extends Activity implements SensorEventListener{
 		
 		String fileName = Environment.getExternalStorageDirectory()
 				.getPath() + "/pathfinder_image.jpg";
-		Graph g = ImageProcessor.process(Highgui.imread(fileName));
-		Mat img = Highgui.imread(fileName);
-		MapView mapView = (MapView) findViewById(R.id.mapView);
 		graph = ImageProcessor.process(Highgui.imread(fileName));
 		mapView = (MapView) findViewById(R.id.mapView);
 		mapView.loadImage(fileName);
+		
+		mapView.drawGraph(graph);
 		
 		Log.i("SENSOR", "Begin detecting");
 		int h = 480;

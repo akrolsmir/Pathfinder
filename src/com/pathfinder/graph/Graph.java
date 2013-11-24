@@ -184,7 +184,6 @@ public class Graph implements GraphInterface{
 	
 	public Iterable<Vertex> getVertices(){
 		return vertices;
-<<<<<<< HEAD
 	}
 	
 	public void takeStrongestSubgraph(){
@@ -217,8 +216,6 @@ public class Graph implements GraphInterface{
 			}
 		}
 		
-=======
->>>>>>> b9293b1ba1c2468167c4889b08643d14915ffb8c
 	}
 	
 	public String toString(){
