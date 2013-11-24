@@ -1,6 +1,7 @@
 package com.pathfinder;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.app.Activity;
 import android.view.Menu;
 
@@ -10,6 +11,11 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		String fileName = Environment.getExternalStorageDirectory()
+				.getPath() + "/pathfinder_image.jpg";
+		MapView mapView = (MapView) findViewById(R.id.mapView);
+		mapView.loadImage(fileName);
 	}
 
 	@Override

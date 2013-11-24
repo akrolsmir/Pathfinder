@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import org.opencv.android.JavaCameraView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.util.AttributeSet;
@@ -51,6 +52,8 @@ public class CameraView extends JavaCameraView implements PictureCallback {
         } catch (java.io.IOException e) {
             Log.e("PictureDemo", "Exception in photoCallback", e);
         }
-
+        
+		Intent intent = new Intent(getContext(), MainActivity.class);
+		getContext().startActivity(intent);
     }
 }
