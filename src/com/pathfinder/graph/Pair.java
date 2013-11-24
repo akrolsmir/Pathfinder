@@ -2,11 +2,12 @@ package com.pathfinder.graph;
 
 /**
  * Class for representing pairs of objects of the same type.
- * @param <T> The type of object to be stored
+ * @param <K> The type of the left object
+ * @param <V> The type of the right object
  */
-public class Pair<T> {
-	private final T left;
-	private final T right;
+public class Pair<K, V> {
+	private K left;
+	private V right;
 	
 	/**
 	 * Constructs a new Pair with null entries
@@ -21,7 +22,12 @@ public class Pair<T> {
 	 * @param l -- the left entry
 	 * @param r -- the right entry
 	 */
-	public Pair(T l, T r){
+	public Pair(K l, V r){
+		left = l;
+		right = r;
+	}
+	
+	public void setValues(K l, V r){
 		left = l;
 		right = r;
 	}
@@ -30,7 +36,7 @@ public class Pair<T> {
 	 * 
 	 * @return The left entry of the pair
 	 */
-	public T getLeft(){
+	public K getLeft(){
 		return left;
 	}
 	
@@ -38,7 +44,7 @@ public class Pair<T> {
 	 * 
 	 * @return The right entry of the pair
 	 */
-	public T getRight(){
+	public V getRight(){
 		return right;
 	}
 }

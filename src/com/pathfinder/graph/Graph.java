@@ -3,6 +3,7 @@ package com.pathfinder.graph;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.HashMap;
 
 import com.pathfinder.graph.exception.GraphException;
 import com.pathfinder.graph.exception.VertexNotInGraphException;
@@ -55,8 +56,10 @@ public class Graph implements GraphInterface{
 		} else if (!vertices.contains(end)){
 			throw new VertexNotInGraphException("Vertex: " + start.toString() + " is not in the graph");
 		}
+		//vertexInfo will store for each vertex v the pair (dist(v), prev(v))
+		HashMap<Vertex, Pair<Double, Vertex>> vertexInfo = new HashMap<Vertex, Pair<Double, Vertex>>();
 		for (Vertex v : vertices){
-			
+			double dist = MAX_VALUE;
 		}
 		return new ArrayList<Vertex>();
 	}
