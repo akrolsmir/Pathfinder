@@ -7,6 +7,7 @@ import android.hardware.SensorManager;
 import android.util.Log;
 
 public class StepDetector implements SensorEventListener {
+	
 	private static final String TAG = "StepDetector";
 	private float sensitivity = 15;
 	private float mLastValues[] = new float[3 * 2];

@@ -1,9 +1,11 @@
 package com.pathfinder;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -21,7 +23,10 @@ public class NavigateActivity extends Activity {
 	private static final String TAG = "NavActivity";
 	private boolean mIsRunning;
 	private TextView mStepValueView;
-	private Button mResetButton;
+	private Button mResetButton;;
+	private BroadcastReceiver mReceiver = null;
+	
+	Intent intent;
 
 	public NavigateActivity() {
 		Log.i(TAG, "Instantiated new " + this.getClass());
@@ -33,9 +38,8 @@ public class NavigateActivity extends Activity {
 		Log.i(TAG, "[SERVICE] Create");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.nav_view_layout);
-
-		startStepService();
-		bindStepService();
+		intent = new Intent(this, com.pathfinder.stepcounter.StepService.class);
+		Log.i(TAG, "starting service");
 
 		mStepValueView = (TextView) findViewById(R.id.counter);
 		mResetButton = (Button) findViewById(R.id.reset_button);
@@ -61,7 +65,6 @@ public class NavigateActivity extends Activity {
 		Log.i(TAG, "[SERVICE] Pause");
 		super.onPause();
 		if (mIsRunning) {
-			unbindStepService();
 		}
 	}
 
@@ -70,10 +73,10 @@ public class NavigateActivity extends Activity {
 		Log.i(TAG, "[SERVICE] Resume");
 		super.onResume();
 		if (!mIsRunning) {
-			startStepService();
-			bindStepService();
-		} else if (mIsRunning) {
-			bindStepService();
+			IntentFilter intentFilter = new IntentFilter();
+			intentFilter.addAction(StepService.MY_ACTION);
+			startService(intent);
+			registerReceiver(mReceiver, intentFilter);
 		}
 	}
 
@@ -93,7 +96,7 @@ public class NavigateActivity extends Activity {
 			mService = null;
 		}
 	};
-
+/*
 	private void startStepService() {
 		if (!mIsRunning) {
 			Log.i(TAG, "[SERVICE] Start");
@@ -113,6 +116,7 @@ public class NavigateActivity extends Activity {
 		Log.i(TAG, "[SERVICE] Unbind");
 		unbindService(mConnection);
 	}
+	*/
 
 	private void stopStepService() {
 		Log.i(TAG, "[SERVICE] Stop");
@@ -136,5 +140,15 @@ public class NavigateActivity extends Activity {
 			}
 		}
 	}
+	
+	private BroadcastReceiver MReceiver = new BroadcastReceiver(){
+		@Override
+		public void onReceive(Context arg0, Intent arg1) {
+			// TODO Auto-generated method stub
+			Log.i(TAG, "Receiving");
+			int step = arg1.getIntExtra("New Step", 1);
+			mStepValueView.setText(mStepValueView.getText());
+		}
+	};
 
 }
