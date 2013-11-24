@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
 
+import com.pathfinder.graph.exception.GraphException;
+import com.pathfinder.graph.exception.VertexNotInGraphException;
+
 /**
  *  Adjacency-set representation of a map. Abstractly paths are edges and stores/rooms are vertices
  */
@@ -37,17 +40,26 @@ public class Graph implements GraphInterface{
 	 * @param verts -- The vertices of the graph
 	 * @param neighbors -- Pairs of adjacent vertices.
 	 */
-	public Graph(Iterable<Vertex> verts, Iterable<Pair<Vertex>> neighbors){
+	public Graph(Iterable<Vertex> verts, Iterable<Pair<Vertex, Vertex>> neighbors){
 		//TODO
 		vertices = new HashSet<Vertex>();
 	}
 	
-
-	public Iterable<Vertex> computePath(Vertex start, Vertex end) throws VertexNotInGraphException{
-		//TODO
+	public Iterable<Vertex> computePath(Vertex start, Vertex end) throws GraphException{
+		 /*
+		  * We will proceed using Dijkstra's algorithm
+		  * Adapted from Algorithms by Dasgupta, Papadimitriou, Vazirani
+		  */
+		if(!vertices.contains(start)){
+			throw new VertexNotInGraphException("Vertex: " + start.toString() + " is not in graph");
+		} else if (!vertices.contains(end)){
+			throw new VertexNotInGraphException("Vertex: " + start.toString() + " is not in the graph");
+		}
+		for (Vertex v : vertices){
+			
+		}
 		return new ArrayList<Vertex>();
 	}
-	
 
 	public void addVertex(Vertex v){
 		//TODO

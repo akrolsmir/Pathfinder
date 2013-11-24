@@ -1,5 +1,8 @@
 package com.pathfinder.graph;
 
+import com.pathfinder.graph.exception.VertexNotInGraphException;
+import com.pathfinder.graph.exception.GraphException;
+
 /**
  * An interface for methods for an adjacency-set graph
  */
@@ -10,9 +13,9 @@ public interface GraphInterface {
 	 * @param start -- The starting node
 	 * @param end -- The target node
 	 * @return A list representing the desired path, or NULL of the vertices are not connected.
-	 * @throws VertexNotInGraphException if start and end are not in the graph
+	 * @throws GraphException if start and end are not in the graph
 	 */
-	Iterable<Vertex> computePath(Vertex start, Vertex end) throws VertexNotInGraphException;
+	Iterable<Vertex> computePath(Vertex start, Vertex end) throws GraphException;
 	
 	/**
 	 * adds a single vertex v 

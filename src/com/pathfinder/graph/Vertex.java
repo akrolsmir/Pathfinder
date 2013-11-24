@@ -3,6 +3,8 @@ package com.pathfinder.graph;
 import java.util.Map;
 import java.util.HashMap;
 
+import com.pathfinder.graph.exception.EdgeNotInGraphException;
+
 /**
  * Object representation of a vertex for a graph represented
  * with Adjacency-Lists. Contains helper methods for setting 
@@ -43,16 +45,16 @@ public class Vertex {
 	 * @param w -- The new weight of the vertex
 	 * @throws IndexOutOfBoundsException -- Thrown if v is not adjacent to this.
 	 */
-	public void setWeight(Vertex v, double w) throws VertexNotInGraphException{
+	public void setWeight(Vertex v, double w) throws EdgeNotInGraphException{
 		if(vertices.containsKey(v)){
 			vertices.put(v, w);
 			try{
 				v.setOtherWeight(this, w);
 			} catch (IndexOutOfBoundsException e){
-				throw new VertexNotInGraphException("Vertex " + v.toString() + "is not in graph");
+				throw new EdgeNotInGraphException("Vertex " + v.toString() + " is not in graph"); //TODO update msg
 			}
 		} else {
-			throw new VertexNotInGraphException("Vertex " + v.toString() + " is not in graph");
+			throw new EdgeNotInGraphException("Vertex " + v.toString() + " is not in graph"); //TODO update msg
 		}
 	}
 	
@@ -63,11 +65,11 @@ public class Vertex {
 	 * @param w -- The new weight of the vertex
 	 * @throws IndexOutOfBoundsException -- Thrown if v is not adjacent to this.
 	 */
-	private void setOtherWeight(Vertex v, double w) throws VertexNotInGraphException{
+	private void setOtherWeight(Vertex v, double w) throws EdgeNotInGraphException{
 		if(vertices.containsKey(v)){
 			vertices.put(v, w);
 		} else {
-			throw new VertexNotInGraphException("Vertex " + v.toString() + " is not in graph");
+			throw new EdgeNotInGraphException("Vertex " + v.toString() + " is not in graph"); // TODO update msg
 		}
 	}
 	
@@ -77,11 +79,11 @@ public class Vertex {
 	 * @return -- the weight of the edge (this, V)
 	 * @throws IndexOutOfBoundsException -- Thrown if v is not adjecent to this.
 	 */
-	public double getWeight (Vertex v) throws VertexNotInGraphException{
+	public double getWeight (Vertex v) throws EdgeNotInGraphException{
 		if(vertices.containsKey(v)){
 			return vertices.get(v);
 		} else{
-			throw new VertexNotInGraphException("Vertex " + v.toString() + " is not in graph");
+			throw new EdgeNotInGraphException("Vertex " + v.toString() + " is not in graph"); //TODO update msg
 		}
 	}
 	
