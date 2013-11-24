@@ -114,6 +114,10 @@ public class Graph implements GraphInterface{
 		Vertex newVertex = new Vertex(start.getLatitude(), start.getLongitude());
 		addVertex(newVertex);
 		addEdge(close.getLeft(), newVertex, close.getRight());
+		edges.remove(edges.size()-1);
+		edges.remove(edges.size()-1);
+		edges.remove(edges.size()-1);
+		edges.remove(edges.size()-1);
 		try{
 			ArrayList<Vertex> path = computePath(close.getLeft(), end);
 			removeVertex(newVertex);
@@ -121,6 +125,8 @@ public class Graph implements GraphInterface{
 		} catch(GraphException g){
 			throw g;
 		}
+		
+		
 	}
 
 	public Pair<Vertex, Double> closestVertexToPath(Loc pos) {
@@ -161,13 +167,22 @@ public class Graph implements GraphInterface{
 			throw new VertexNotInGraphException("Vertex " + v.toString() + " is not in the graph");
 		} else {
 			for(Vertex adj : v.getAdjacent()){
-				v.removeAdjacent(adj);
+//				v.removeAdjacent(adj);
+				adj.removeAdjacent(v);
 			}
 			vertices.remove(v);
 		}
 	}
+	
+	public ArrayList<Float> edges = new ArrayList<Float>();
 
 	public void addEdge(Vertex v1, Vertex v2, Double w) throws VertexNotInGraphException{
+		
+		edges.add((float) v1.getLoc().getLatitude());
+		edges.add((float) v1.getLoc().getLongitude());
+		edges.add((float) v2.getLoc().getLatitude());
+		edges.add((float) v2.getLoc().getLongitude());
+		
 		if(!(vertices.contains(v1) && vertices.contains(v2))){
 			throw new VertexNotInGraphException("Vertices are not in graph.");
 		} else {
@@ -205,17 +220,22 @@ public class Graph implements GraphInterface{
 			}
 		}
 		
+		Set<Vertex> toRemove = new HashSet<Vertex>();
+		
 		int root = disJ.largestSet();
 		for(Vertex v : vertices){
 			if(disJ.find(intMap.get(v)) != root){
-				try {
-					this.removeVertex(v);
-				} catch (GraphException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				toRemove.add(v);
 			}
 		}
+		
+		for(Vertex v : toRemove)
+			try {
+				this.removeVertex(v);
+			} catch (GraphException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		
 	}
 	

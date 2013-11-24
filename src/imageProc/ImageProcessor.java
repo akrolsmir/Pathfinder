@@ -110,8 +110,8 @@ public class ImageProcessor {
 		
 //		Highgui.imwrite(edgeImg, edgeMat);
 //		Highgui.imwrite(vertexImg, vertexMat);
-		if(lines.cols() < 50) g.takeStrongestSubgraph();
-		outGraph(g, image);
+//		if(lines.cols() < 50) g.takeStrongestSubgraph();
+//		outGraph(g, image);
 		return g;
 	}
 	
