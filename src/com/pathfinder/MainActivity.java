@@ -1,8 +1,14 @@
 package com.pathfinder;
 
+import java.util.Iterator;
+
 import imageProc.ImageProcessor;
 
+import org.opencv.core.Mat;
 import org.opencv.highgui.Highgui;
+
+import com.pathfinder.graph.Graph;
+import com.pathfinder.graph.Vertex;
 
 import android.os.Bundle;
 import android.os.Environment;
@@ -18,7 +24,9 @@ public class MainActivity extends Activity {
 		
 		String fileName = Environment.getExternalStorageDirectory()
 				.getPath() + "/pathfinder_image.jpg";
-		ImageProcessor.process(Highgui.imread(fileName));
+		Graph g = ImageProcessor.process(Highgui.imread(fileName));
+		Mat img = Highgui.imread(fileName);
+		Iterator<Vertex>vertices = g.getVertices();
 		MapView mapView = (MapView) findViewById(R.id.mapView);
 		mapView.loadImage(fileName);
 	}

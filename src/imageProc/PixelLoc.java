@@ -19,4 +19,8 @@ class PixelLoc{
 	public int hashCode(){
 		return 1000*(int)this.y + (int)this.x;
 	}
+	
+	public String toString(){
+		return "(" + x + ", " + y + ")";
+	}
 }
