@@ -1,11 +1,14 @@
 package com.pathfinder;
 
+import imageProc.ImageProcessor;
+
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase.CvCameraViewFrame;
 import org.opencv.android.CameraBridgeViewBase.CvCameraViewListener2;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Mat;
+import org.opencv.highgui.Highgui;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -108,11 +111,21 @@ public class CameraActivity extends Activity implements CvCameraViewListener2,
 			String fileName = Environment.getExternalStorageDirectory()
 					.getPath() + "/pathfinder_image.jpg";
 			// "/sample_picture_" + currentDateandTime + ".jpg";
+			Log.d("File tag", fileName);
 			mOpenCvCameraView.takePicture(fileName);
 			Toast.makeText(this, fileName + " saved", Toast.LENGTH_SHORT)
 					.show();
 			pictureTaken = true;
+			
+//			processImage(fileName);
+			
 		}
 		return false;
 	}
+	
+	void processImage(String fileName){
+		ImageProcessor.process(Highgui.imread(fileName));
+//		ImageProcessor.process(Highgui.imread(Environment.getExternalStorageDirectory().getPath() + "/map.jpg"));
+	}
+	
 }

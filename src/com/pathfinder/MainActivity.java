@@ -1,5 +1,9 @@
 package com.pathfinder;
 
+import imageProc.ImageProcessor;
+
+import org.opencv.highgui.Highgui;
+
 import android.os.Bundle;
 import android.os.Environment;
 import android.app.Activity;
@@ -14,6 +18,7 @@ public class MainActivity extends Activity {
 		
 		String fileName = Environment.getExternalStorageDirectory()
 				.getPath() + "/pathfinder_image.jpg";
+		ImageProcessor.process(Highgui.imread(fileName));
 		MapView mapView = (MapView) findViewById(R.id.mapView);
 		mapView.loadImage(fileName);
 	}

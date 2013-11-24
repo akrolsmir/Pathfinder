@@ -2,10 +2,13 @@ package imageProc;
 
 import java.util.HashMap;
 
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.imgproc.Imgproc;
+
+import android.util.Log;
 
 import com.pathfinder.graph.Graph;
 import com.pathfinder.graph.Vertex;
@@ -18,18 +21,21 @@ public class ImageProcessor {
 	static double theta = 180;
 
 	public static Graph process(Mat image) {
-		Mat edgeDetect = Mat.zeros(image.size(), image.type());
+		Log.d("ImageProcessor", "calculating image of " + image.cols() + " x " + image.rows());
+		Mat edgeDetect = new Mat(image.rows(), image.cols(), CvType.CV_8UC1);
 		MatOfPoint lines = new MatOfPoint();
+//		Mat lines = new Mat();
 		Imgproc.Canny(image, edgeDetect, low_thresh, high_thresh);
+		Log.d("TAG", "input edge image with channels: " + edgeDetect.channels() + " of size " + edgeDetect.rows() + " x " + edgeDetect.cols());
 		Imgproc.HoughLinesP(edgeDetect, lines, 1, Math.PI/180, 100, 0, 0 );	
-
+		Log.d("TAG", "Starting graph computations");
 		return exportGraph(lines);
 	}
 	
-	private static Graph exportGraph(MatOfPoint lines){
+	private static Graph exportGraph(Mat lines){
 		HashMap<PixelLoc, Vertex> vertices = new HashMap<PixelLoc, Vertex>();
 		Graph g = new Graph();
-		Point[] edges = lines.toArray();
+		Point[] edges = ((MatOfPoint) lines).toArray();
 		for (int i = 0; i < edges.length; i++) {
 			Point pt1 = new Point(), pt2 = new Point();
 			double a = Math.cos(theta), b = Math.sin(theta);
