@@ -216,6 +216,6 @@ public class Vertex {
 	public int hashCode(){
 		//a bad hashcode please fix me please please please
 		//TODO
-		return (int)(location.getLatitude()*location.getLongitude());
+		return (int)(1000*location.getLatitude()*location.getLongitude());
 	}
 }

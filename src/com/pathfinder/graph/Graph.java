@@ -3,7 +3,6 @@ package com.pathfinder.graph;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.PriorityQueue;
@@ -59,7 +58,7 @@ public class Graph implements GraphInterface{
 		}
 	}
 	
-	public LinkedList<Vertex> computePath(Vertex start, Vertex end) throws GraphException{
+	public ArrayList<Vertex> computePath(Vertex start, Vertex end) throws GraphException{
 		 /*
 		  * We will proceed using Dijkstra's algorithm
 		  * Adapted from Algorithms by Dasgupta, Papadimitriou, Vazirani
@@ -93,10 +92,10 @@ public class Graph implements GraphInterface{
 		}
 		//Process result of Dijkstra's into a list
 		Vertex curr = end;
-		LinkedList<Vertex> path = new LinkedList<Vertex>();
-		path.addFirst(end);
+		ArrayList<Vertex> path = new ArrayList<Vertex>();
+		path.add(0, end);
 		while(curr != start){
-			path.addFirst(curr.getPrev());
+			path.add(0, curr.getPrev());
 			curr = curr.getPrev();
 		}
 		return path;
