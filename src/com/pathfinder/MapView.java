@@ -34,6 +34,7 @@ public class MapView extends View {
 
 	Bitmap bmp;
 	List<Vertex> points = new ArrayList<Vertex>();
+	List<Vertex> graph_points = new ArrayList<Vertex>();
 	Paint paint = new Paint();
 	Vertex dst = new Vertex();
 
@@ -54,6 +55,15 @@ public class MapView extends View {
 			Loc cur = points.get(i).getLoc(), next = points.get(i+1).getLoc();
 			float x1 = (float) cur.getLatitude(), y1 = (float) cur.getLongitude(),
 					x2 = (float) next.getLatitude(), y2 = (float) next.getLongitude();
+			canvas.drawPoint(x1, y1, paint);
+			canvas.drawLine(x1, y1, x2, y2, paint);
+			
+			cur = graph_points.get(i).getLoc();
+			next = graph_points.get(i+1).getLoc();
+			x1 = (float) cur.getLatitude(); 
+			y1 = (float) cur.getLongitude();
+			x2 = (float) next.getLatitude(); 
+			y2 = (float) next.getLongitude();
 			canvas.drawPoint(x1, y1, paint);
 			canvas.drawLine(x1, y1, x2, y2, paint);
 		}
@@ -86,12 +96,7 @@ public class MapView extends View {
 	}
 	
 	public void drawGraph(Graph g){
-		//save points
-		ArrayList<Vertex> temp = new ArrayList<Vertex>();
-		for(Vertex v : points){
-			temp.add(v);
-		}
-		points.clear();
+		graph_points.clear();
 		Vertex start = g.getVertices().iterator().next();
 		if(start == null){
 			return;
@@ -104,9 +109,9 @@ public class MapView extends View {
 			S.push(start);
 			while(!S.empty()){
 				Vertex v = S.peek();
-				points.add(v);
+				graph_points.add(v);
 				for(Vertex u : v.getAdjacent()){
-					points.add(u);
+					graph_points.add(u);
 					if(!u.getVisited()){
 						boolean explored = true;
 						for(Vertex w : u.getAdjacent()){
@@ -122,16 +127,12 @@ public class MapView extends View {
 						}
 						u.setVisited(true);
 					}
-					points.add(v);
+					graph_points.add(v);
 				}
 				S.pop();
 			}
 		}
 		this.invalidate();
-		//Restore points
-		for(Vertex v : temp){
-			points.add(v);
-		}
 	}
 
 	@Override
