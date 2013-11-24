@@ -188,7 +188,7 @@ public class Vertex {
 	 * 
 	 * @return the "visited" state of the vertex
 	 */
-	protected boolean getVisted(){
+	protected boolean getVisited(){
 		return visited;
 	}
 	

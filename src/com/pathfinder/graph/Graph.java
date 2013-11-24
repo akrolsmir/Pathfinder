@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.PriorityQueue;
 
+import com.pathfinder.graph.exception.EdgeNotInGraphException;
 import com.pathfinder.graph.exception.GraphException;
 import com.pathfinder.graph.exception.VertexNotInGraphException;
 
@@ -72,7 +73,7 @@ public class Graph implements GraphInterface{
 		for (Vertex v : vertices){
 			v.setDist(Double.MAX_VALUE);
 			v.setPrev(null);
-			v.setVisited(true);
+			v.setVisited(false);
 		}
 		start.setDist(0.0);
 		PriorityQueue<Vertex> H = new PriorityQueue<Vertex>(vertices.size(), new CompareDist());
@@ -83,7 +84,7 @@ public class Graph implements GraphInterface{
 			Vertex small = H.poll();
 			small.setVisited(true);
 			for (Vertex adj : small.getAdjacent()){
-				if(!adj.getVisted() && adj.getDist() > small.getDist() + small.getWeight(adj)){
+				if(!adj.getVisited() && adj.getDist() > small.getDist() + small.getWeight(adj)){
 					adj.setDist(small.getDist() + small.getWeight(adj));
 					adj.setPrev(small);
 					H.add(adj);
@@ -149,6 +150,24 @@ public class Graph implements GraphInterface{
 	
 	public Iterator<Vertex> getVertices(){
 		return vertices.iterator();
+	}
+	
+	public String toString(){
+		String verts = "";
+		for(Vertex v : vertices){
+			verts += v.toString() + "\n";
+		}
+		String edges = "";
+		for(Vertex v : vertices){
+			for (Vertex u : v.getAdjacent()){
+				try {
+					edges += v.toString() + " " + u.toString() + " " + v.getWeight(u) + "\n";
+				} catch (EdgeNotInGraphException e) {
+					//do nothing
+				}
+			}
+		}
+		return "Vertices:\n" + verts + "Edges:\n" + edges;
 	}
 }
 
