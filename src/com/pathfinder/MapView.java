@@ -57,13 +57,14 @@ public class MapView extends View {
 					x2 = (float) next.getLatitude(), y2 = (float) next.getLongitude();
 			canvas.drawPoint(x1, y1, paint);
 			canvas.drawLine(x1, y1, x2, y2, paint);
-			
-			cur = graph_points.get(i).getLoc();
-			next = graph_points.get(i+1).getLoc();
-			x1 = (float) cur.getLatitude(); 
-			y1 = (float) cur.getLongitude();
-			x2 = (float) next.getLatitude(); 
-			y2 = (float) next.getLongitude();
+		}
+		for(int i = 0; i < graph_points.size()-1; i++){
+			Loc cur = graph_points.get(i).getLoc();
+			Loc next = graph_points.get(i+1).getLoc();
+			float x1 = (float) cur.getLatitude(); 
+			float y1 = (float) cur.getLongitude();
+			float x2 = (float) next.getLatitude(); 
+			float y2 = (float) next.getLongitude();
 			canvas.drawPoint(x1, y1, paint);
 			canvas.drawLine(x1, y1, x2, y2, paint);
 		}
