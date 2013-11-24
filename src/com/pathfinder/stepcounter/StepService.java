@@ -2,7 +2,6 @@ package com.pathfinder.stepcounter;
 
 import android.app.Service;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Binder;
@@ -16,7 +15,7 @@ public class StepService extends Service {
 	private Sensor mSensor;
 	private StepDetector stepDetector;
 	private StepListener stepListener;
-	
+
 	public class StepBinder extends Binder {
 		StepService getService() {
 			return StepService.this;
@@ -73,14 +72,15 @@ public class StepService extends Service {
 	public IBinder onBind(Intent intent) {
 		return mBinder;
 	}
-	
-	public void resetSteps(){
+
+	public void resetSteps() {
 		stepListener.reset();
 	}
-	public int getNumSteps(){
+
+	public int getNumSteps() {
 		return stepListener.getSteps();
 	}
-	
+
 	/**
 	 * Receives messages from activity.
 	 */
