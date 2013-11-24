@@ -1,4 +1,4 @@
-package com.pathfinder;
+package com.pathfinder.graph;
 
 /**
  * Class for representing pairs of objects of the same type.

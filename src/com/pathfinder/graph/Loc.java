@@ -1,4 +1,4 @@
-package com.pathfinder;
+package com.pathfinder.graph;
 
 /**
  * Wrapper class for the latitude and longitude.

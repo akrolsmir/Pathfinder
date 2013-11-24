@@ -1,4 +1,4 @@
-package com.pathfinder;
+package com.pathfinder.graph;
 
 /**
  *  Abstraction of a floor within a building.

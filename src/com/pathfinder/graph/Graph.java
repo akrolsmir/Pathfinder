@@ -1,4 +1,4 @@
-package com.pathfinder;
+package com.pathfinder.graph;
 
 import java.util.ArrayList;
 import java.util.Set;

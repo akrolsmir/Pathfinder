@@ -1,4 +1,4 @@
-package com.pathfinder;
+package com.pathfinder.graph;
 
 /**
  * An interface for methods for an adjacency-set graph
