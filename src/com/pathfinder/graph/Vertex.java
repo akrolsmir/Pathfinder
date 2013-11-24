@@ -48,8 +48,10 @@ public class Vertex {
 	public Vertex(double lat, double lon, Iterable<Vertex> verts) throws EdgeNotInGraphException{
 		location = new Loc(lat, lon);
 		vertices = new HashMap<Vertex, Double>();
-		for (Vertex v : verts){
-			setWeight(v, 0.0);
+		if(verts != null){
+			for (Vertex v : verts){
+				setWeight(v, 0.0);
+			}
 		}
 	}
 	
