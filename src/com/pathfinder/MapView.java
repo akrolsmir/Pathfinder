@@ -85,6 +85,10 @@ public class MapView extends View {
 	public void loadImage(String filename) {
 		Options options = new Options();
 		options.inSampleSize = 4;
+//		Matrix matrix = new Matrix();
+//		matrix.postRotate(90);
+//		Bitmap scaledBitmap = BitmapFactory.decodeFile(filename, options);
+//		bmp = Bitmap.createBitmap(scaledBitmap , 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
 		bmp = BitmapFactory.decodeFile(filename, options);
 		this.invalidate();
 	}

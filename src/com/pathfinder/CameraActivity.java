@@ -12,7 +12,6 @@ import org.opencv.highgui.Highgui;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -25,7 +24,7 @@ import android.widget.Toast;
 
 public class CameraActivity extends Activity implements CvCameraViewListener2,
 		OnTouchListener {
-	private static final String TAG = "OCVSample::Activity";
+	private static final String TAG = "CameraActivity";
 
 	private CameraView mOpenCvCameraView;
 	private boolean pictureTaken;
@@ -35,7 +34,7 @@ public class CameraActivity extends Activity implements CvCameraViewListener2,
 		public void onManagerConnected(int status) {
 			switch (status) {
 			case LoaderCallbackInterface.SUCCESS: {
-				Log.i(TAG, "OpenCV loaded successfully");
+				Log.i(TAG, "[CAMERA] OpenCV loaded successfully");
 				mOpenCvCameraView.enableView();
 				mOpenCvCameraView.setOnTouchListener(CameraActivity.this);
 			}
@@ -49,14 +48,14 @@ public class CameraActivity extends Activity implements CvCameraViewListener2,
 	};
 
 	public CameraActivity() {
-		Log.i(TAG, "Instantiated new " + this.getClass());
+		Log.i(TAG, "[CAMERA] Instantiated");
 		pictureTaken = false;
 	}
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		Log.i(TAG, "called onCreate");
+		Log.i(TAG, "[CAMERA] onCreate");
 		super.onCreate(savedInstanceState);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -104,17 +103,13 @@ public class CameraActivity extends Activity implements CvCameraViewListener2,
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 		if (!pictureTaken) {
-			Log.i(TAG, "onTouch event");
+			Log.i(TAG, "[CAMERA] onTouch");
 			// SimpleDateFormat sdf = new
 			// SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
 			// String currentDateandTime = sdf.format(new Date());
-			String fileName = Environment.getExternalStorageDirectory()
-					.getPath() + "/pathfinder_image.jpg";
-			// "/sample_picture_" + currentDateandTime + ".jpg";
-			Log.d("File tag", fileName);
-			mOpenCvCameraView.takePicture(fileName);
-			Toast.makeText(this, fileName + " saved", Toast.LENGTH_SHORT)
-					.show();
+			String basePath = Environment.getExternalStorageDirectory().getPath();
+			mOpenCvCameraView.takePicture(basePath + "/pathfinder_intermediate.jpg", basePath + "/pathfinder_image.jpg");
+			// Toast.makeText(this, fileName + " saved", Toast.LENGTH_SHORT).show();
 			pictureTaken = true;
 			
 //			processImage(fileName);
