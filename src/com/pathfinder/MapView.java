@@ -127,6 +127,7 @@ public class MapView extends View {
 				S.pop();
 			}
 		}
+		this.invalidate();
 		//Restore points
 		for(Vertex v : temp){
 			points.add(v);
