@@ -28,13 +28,16 @@ import android.util.Log;
 import android.view.Menu;
 
 public class MainActivity extends Activity implements SensorEventListener{
+	
+	/*
+	 * variables for sensors
+	 */
 	private SensorManager mSensorManager;
 	private List<Sensor> mSensorList;
-	private float sensitivity = 3;
+	private float sensitivity = 3; //may change later
 	private float mLastValues[] = new float[3 * 2];
 	private float mScale[] = new float[2];
 	private float mYOffset;
-
 	private float mLastDirections[] = new float[3 * 2];
 	private float mLastExtremes[][] = { new float[3 * 2], new float[3 * 2] };
 	private float mLastDiff[] = new float[3 * 2];
@@ -44,9 +47,9 @@ public class MainActivity extends Activity implements SensorEventListener{
 	private float[] rot = {0, 0, 0, 0, 0, 0, 0, 0, 0};
 	private float[] incl = {0, 0, 0, 0, 0, 0, 0, 0, 0};
 	private float[] orient = {0, 0, 0};
+	private float prevAzimuth = 0;
 	
 	//FLAG FOR WHETHER A STEP WAS MADE OR NOT
-	private boolean stepped = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -133,7 +136,7 @@ public class MainActivity extends Activity implements SensorEventListener{
 				if (isAlmostAsLargeAsPrevious && isPreviousLargeEnough
 						&& isNotContra) {
 					Log.i("STEPPING", "step");
-					stepped = true;
+					doStep();
 					mLastMatch = extType;
 				} else {
 					mLastMatch = -1;
@@ -175,6 +178,25 @@ public class MainActivity extends Activity implements SensorEventListener{
 	 */
 	private float getAzimuth(){
 		return orient[0];
+	}
+	
+	private void doStep(){
+		float azimuth = averageAzimuth();
+		double threshold = 3.14/18;
+		if(Math.abs(azimuth - prevAzimuth) > threshold){
+			prevAzimuth = azimuth; 
+		}
+		//do some sort of draw
+		//Check if off path. If so, recompute
+	}
+	
+	private float averageAzimuth(){
+		int samples = 50;
+		float avg = 0;
+		while(samples-- != 0){
+			avg += getAzimuth();
+		}
+		return avg/samples;
 	}
 
 }
