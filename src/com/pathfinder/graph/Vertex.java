@@ -90,6 +90,10 @@ public class Vertex {
 		}
 	}
 	
+	public Map<Vertex, Double> getVertices(){
+		return vertices;
+	}
+	
 	/**
 	 * 
 	 * @param v -- the vertex that is adjacent to THIS.

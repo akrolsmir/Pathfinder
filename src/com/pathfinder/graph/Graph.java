@@ -2,10 +2,13 @@ package com.pathfinder.graph;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.PriorityQueue;
+
+import android.util.SparseArray;
 
 import com.pathfinder.graph.exception.EdgeNotInGraphException;
 import com.pathfinder.graph.exception.GraphException;
@@ -179,8 +182,40 @@ public class Graph implements GraphInterface{
 		}
 	}
 	
-	public Iterator<Vertex> getVertices(){
-		return vertices.iterator();
+	public Iterable<Vertex> getVertices(){
+		return vertices;
+	}
+	
+	public void takeStrongestSubgraph(){
+		SparseArray<Vertex> vertexMap = new SparseArray <Vertex>();
+		HashMap<Vertex, Integer> intMap = new HashMap<Vertex, Integer>();
+		int i = 0;
+		for(Vertex v : vertices){
+			vertexMap.put(i, v);
+			intMap.put(v, i);
+			i++;
+		}
+		
+		DisjointSets disJ = new DisjointSets(i+1);
+		
+		for (Vertex v : vertices) {
+			for (Vertex other : v.getVertices().keySet()) {
+				disJ.union(disJ.find(intMap.get(v)), disJ.find(intMap.get(other)));
+			}
+		}
+		
+		int root = disJ.largestSet();
+		for(Vertex v : vertices){
+			if(disJ.find(intMap.get(v)) != root){
+				try {
+					this.removeVertex(v);
+				} catch (GraphException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
 	}
 	
 	public String toString(){

@@ -46,11 +46,15 @@ public class ImageProcessor {
 		Log.d("TAG", "input edge image with channels: " + edgeDetect.channels() + " of size " + edgeDetect.rows() + " x " + edgeDetect.cols());
 		int i = 0;
 		do{
-			Imgproc.HoughLinesP(edgeDetect, lines, 1, Math.PI/180, low_thresh - i, minLineLen, maxLineGap );	
-			Log.d("TAG", "Starting graph computations with lineMat: " + lines.cols() + " x " + lines.rows());
+			Imgproc.HoughLinesP(edgeDetect, lines, 1, Math.PI/180, low_thresh - i, minLineLen, maxLineGap );			
 			i+=5;
 		} while(lines.cols() < 3 && low_thresh - i > 0);
 		
+		while (lines.cols() > 100){
+			Imgproc.HoughLinesP(edgeDetect, lines, 1, Math.PI/180, low_thresh - i, minLineLen, maxLineGap );			
+			i-=5;
+		}
+		Log.d("TAG", "Starting graph computations with lineMat: " + lines.cols() + " x " + lines.rows());
 		return exportGraph(lines, image);
 	}
 	
@@ -104,10 +108,28 @@ public class ImageProcessor {
 			
 		}
 		
+//		Highgui.imwrite(edgeImg, edgeMat);
+//		Highgui.imwrite(vertexImg, vertexMat);
+		if(lines.cols() < 50) g.takeStrongestSubgraph();
+		outGraph(g, image);
+		return g;
+	}
+	
+	private static void outGraph(Graph g, Mat image){
+		Mat vertexMat = new Mat(image.rows(), image.cols(), CvType.CV_8UC1);
+		Mat edgeMat = new Mat(image.rows(), image.cols(), CvType.CV_8UC1);
+		for (Vertex v : g.getVertices()) {
+			Point pt = new Point(v.getLoc().getLatitude(), v.getLoc().getLongitude());
+			Core.rectangle(vertexMat, pt, new Point(pt.x + 1, pt.y+1), new Scalar(255.0, 255.0, 255.0));
+			for (Vertex other : v.getAdjacent()){
+				Point otherPt = new Point(other.getLoc().getLatitude(), other.getLoc().getLongitude());
+				Core.line(edgeMat, pt,otherPt, new Scalar(255.0, 255.0, 255.0), 5);
+			}
+		}
+		
 		Highgui.imwrite(edgeImg, edgeMat);
 		Highgui.imwrite(vertexImg, vertexMat);
 		
-		return g;
 	}
 	
 	static double dist(PixelLoc p1, PixelLoc p2){

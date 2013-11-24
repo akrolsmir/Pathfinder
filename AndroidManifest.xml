@@ -39,13 +39,10 @@
         android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
         <activity
             android:name=".CameraActivity"
-<<<<<<< HEAD
             android:label="@string/app_name" >
-=======
             android:configChanges="keyboardHidden|orientation"
             android:label="@string/app_name"
             android:screenOrientation="landscape" >
->>>>>>> 94d9c9187dc6d2c25be0252ba43f528c5a4c76a1
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
