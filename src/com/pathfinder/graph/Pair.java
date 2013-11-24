@@ -27,8 +27,29 @@ public class Pair<K, V> {
 		right = r;
 	}
 	
+	/**
+	 * Sets the values of the pair with l and r
+	 * @param l -- the new left entry
+	 * @param r -- the new right entry
+	 */
 	public void setValues(K l, V r){
 		left = l;
+		right = r;
+	}
+	
+	/**
+	 * Sets the left value of the pair with l
+	 * @param l -- the new left entry
+	 */
+	public void setLeft(K l){
+		left = l;
+	}
+	
+	/**
+	 * Sets the right value ofthe pair with r
+	 * @param r -- the new right entry
+	 */
+	public void setRight(V r){
 		right = r;
 	}
 	

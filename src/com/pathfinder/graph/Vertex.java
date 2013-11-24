@@ -2,6 +2,7 @@ package com.pathfinder.graph;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Set;
 
 import com.pathfinder.graph.exception.EdgeNotInGraphException;
 
@@ -11,6 +12,9 @@ import com.pathfinder.graph.exception.EdgeNotInGraphException;
  */
 public class Vertex {
 	private Loc location;
+	private Double dist;
+	private Vertex prev;
+	private boolean visited;
 	
 	/*
 	 * Note: This may change to a HashTable if we really needed this to be thread-safe
@@ -30,11 +34,11 @@ public class Vertex {
 	 * @param lon -- The longitude of the vertex
 	 * @param verts -- The vertices that will be connected.
 	 */
-	public Vertex(double lat, double lon, Iterable<Vertex> verts){
+	public Vertex(double lat, double lon, Iterable<Vertex> verts) throws EdgeNotInGraphException{
 		location = new Loc(lat, lon);
 		vertices = new HashMap<Vertex, Double>();
 		for (Vertex v : verts){
-			vertices.put(v, 0.0);
+			setWeight(v, 0.0);
 		}
 	}
 	
@@ -85,6 +89,102 @@ public class Vertex {
 		} else{
 			throw new EdgeNotInGraphException("Vertex " + v.toString() + " is not in graph"); //TODO update msg
 		}
+	}
+	
+	/**
+	 * 
+	 * @return the vertices adjacent to THIS
+	 */
+	public Set<Vertex> getAdjacent(){
+		return vertices.keySet();
+	}
+	
+	/**
+	 * Makes v adjacent to THIS
+	 * @param v -- a new adjacent vertex
+	 * @param w -- The weight of (this, v)
+	 */
+	public void addAdjacent(Vertex v, double w){
+		vertices.put(v, w);
+		v.addOtherAdjacent(this, w);
+	}
+	
+	/**
+	 * Helper method for addAdjacent (must update both adjacency lists)
+	 * @param v -- The adjacent vertex
+	 * @param w -- The weight of (this, v)
+	 */
+	private void addOtherAdjacent(Vertex v, double w){
+		vertices.put(v, w);
+	}
+	
+	/**
+	 * Removes the adjacent vertex v
+	 * @param v
+	 */
+	public void removeAdjacent(Vertex v) throws EdgeNotInGraphException{
+		if(vertices.containsKey(v)){
+			vertices.remove(v);
+			v.removeOtherAdjacent(this);
+		} else {
+			throw new EdgeNotInGraphException("Attempted to remove nonexistant edge");
+		}
+	}
+	
+	private void removeOtherAdjacent(Vertex v) throws EdgeNotInGraphException{
+		if(vertices.containsKey(v)){
+			vertices.remove(v);
+		} else {
+			throw new EdgeNotInGraphException("Attempted to remove nonexistant edge");
+		}
+	}
+	
+	/** 
+	 * 
+	 * @return distance used in computePath
+	 */
+	protected Double getDist(){
+		return dist;
+	}
+	
+	/**
+	 * Sets this vertex's distance for use in computePath
+	 * @param d -- the new distance
+	 */
+	protected void setDist(Double d){
+		dist = d;
+	}
+	
+	/**
+	 * 
+	 * @return previous vertex used in computePath
+	 */
+	protected Vertex getPrev(){
+		return prev;
+	}
+	
+	/**
+	 * Sets the previous vertex for use in computePath
+	 * @param v -- the previous vertex
+	 */
+	protected void setPrev(Vertex v){
+		prev = v;
+	}
+	
+	/**
+	 * 
+	 * @return the "visited" state of the vertex
+	 */
+	protected boolean getVisted(){
+		return visited;
+	}
+	
+	/**
+	 * Sets the "visited" state of this vertex to v
+	 * @param v -- the new "visited" state
+	 */
+	protected void setVisited(boolean v){
+		visited = v;
 	}
 	
 	/**
