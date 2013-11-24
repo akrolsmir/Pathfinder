@@ -111,11 +111,12 @@ public class Graph implements GraphInterface{
 	public Iterable<Vertex> computePathToGraph(Loc start, Vertex end)
 			throws GraphException {
 		Pair<Vertex, Double> close = closestVertexToPath(start);
-		addVertex(close.getLeft());
-		addEdge(close.getLeft(), end, close.getRight());
+		Vertex newVertex = new Vertex(start.getLatitude(), start.getLongitude());
+		addVertex(newVertex);
+		addEdge(close.getLeft(), newVertex, close.getRight());
 		try{
 			ArrayList<Vertex> path = computePath(close.getLeft(), end);
-			removeVertex(close.getLeft());
+			removeVertex(newVertex);
 			return path;
 		} catch(GraphException g){
 			throw g;
