@@ -9,12 +9,9 @@ import org.opencv.core.Mat;
 import org.opencv.highgui.Highgui;
 
 import com.pathfinder.graph.Graph;
-<<<<<<< HEAD
 import com.pathfinder.graph.Vertex;
 
 import com.pathfinder.graph.Graph;
-=======
->>>>>>> b9293b1ba1c2468167c4889b08643d14915ffb8c
 import com.pathfinder.graph.Loc;
 import com.pathfinder.graph.Pair;
 import com.pathfinder.graph.Vertex;
@@ -69,12 +66,9 @@ public class MainActivity extends Activity implements SensorEventListener{
 		
 		String fileName = Environment.getExternalStorageDirectory()
 				.getPath() + "/pathfinder_image.jpg";
-<<<<<<< HEAD
 		Graph g = ImageProcessor.process(Highgui.imread(fileName));
 		Mat img = Highgui.imread(fileName);
 		MapView mapView = (MapView) findViewById(R.id.mapView);
-=======
->>>>>>> b9293b1ba1c2468167c4889b08643d14915ffb8c
 		graph = ImageProcessor.process(Highgui.imread(fileName));
 		mapView = (MapView) findViewById(R.id.mapView);
 		mapView.loadImage(fileName);
