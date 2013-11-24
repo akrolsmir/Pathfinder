@@ -179,8 +179,8 @@ public class Graph implements GraphInterface{
 		}
 	}
 	
-	public Iterator<Vertex> getVertices(){
-		return vertices.iterator();
+	public Iterable<Vertex> getVertices(){
+		return vertices;
 	}
 	
 	public String toString(){

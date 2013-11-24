@@ -16,11 +16,15 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import com.pathfinder.graph.Loc;
 import com.pathfinder.graph.Vertex;
+import com.pathfinder.graph.exception.GraphException;
 
 public class MapView extends View {
+	
+	
 
 	public MapView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -29,6 +33,7 @@ public class MapView extends View {
 	Bitmap bmp;
 	List<Vertex> points = new ArrayList<Vertex>();
 	Paint paint = new Paint();
+	Vertex dst = new Vertex();
 
 	@Override
 	protected void onDraw(Canvas canvas) {
@@ -82,10 +87,39 @@ public class MapView extends View {
 	public boolean onTouchEvent(MotionEvent event) {
 		switch (event.getAction()) {
 		case MotionEvent.ACTION_DOWN:
-			Log.d("MapView", event.toString());
-			placePoint(event.getX(), event.getY());
-			this.invalidate();
-			break;
+			if(((MainActivity) this.getContext()).calibrate == true){
+				Log.d("MapView", "Calibrate Start");
+				((MainActivity) this.getContext()).calibrating = true;
+				((MainActivity) this.getContext()).calibrate = false;
+				placePoint(event.getX(), event.getY());
+				this.invalidate();
+				Toast.makeText(this.getContext(), "Please select a location and walk to it", Toast.LENGTH_SHORT).show();
+				break;
+			} else if (((MainActivity) this.getContext()).calibrating == true) {
+				Log.d("MapView", "Calibrate End");
+				((MainActivity) this.getContext()).calibrating = false;
+				placePoint(event.getX(), event.getY());
+				this.invalidate();
+				((MainActivity) this.getContext()).avgStride = 
+						points.get(0).getLoc().computeDist(points.get(1).getLoc()) / ((MainActivity) this.getContext()).numSteps;
+				points.clear();
+				placePoint(event.getX(), event.getY());
+				this.invalidate();
+				break;
+			} else {
+				Log.d("MapView", event.toString());
+				placePoint(event.getX(), event.getY());
+				dst = ((MainActivity) this.getContext()).graph.closestVertexToPath(
+						new Loc((double) event.getX(), (double) event.getY())).getLeft();
+				try{
+					((MainActivity) this.getContext()).graph.computePathToGraph(points.get(0).getLoc(), dst);
+					//plot this
+				} catch (GraphException g){
+					Toast.makeText(this.getContext(), "Invalid location", Toast.LENGTH_SHORT).show();
+				}
+				this.invalidate();
+				break;
+			}
 		}
 		return super.onTouchEvent(event);
 	}

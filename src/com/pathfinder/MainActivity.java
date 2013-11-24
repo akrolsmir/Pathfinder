@@ -6,6 +6,12 @@ import imageProc.ImageProcessor;
 
 import org.opencv.highgui.Highgui;
 
+import com.pathfinder.graph.Graph;
+import com.pathfinder.graph.Loc;
+import com.pathfinder.graph.Pair;
+import com.pathfinder.graph.Vertex;
+import com.pathfinder.graph.exception.GraphException;
+
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -15,6 +21,7 @@ import android.os.Environment;
 import android.app.Activity;
 import android.util.Log;
 import android.view.Menu;
+import android.widget.Toast;
 
 public class MainActivity extends Activity implements SensorEventListener{
 	
@@ -37,6 +44,13 @@ public class MainActivity extends Activity implements SensorEventListener{
 	private float[] incl = {0, 0, 0, 0, 0, 0, 0, 0, 0};
 	private float[] orient = {0, 0, 0};
 	private float prevAzimuth = 0;
+	protected boolean calibrate = false;
+	protected boolean calibrating = false;
+	protected int numSteps = 0;
+	protected double avgStride = 0;
+	protected double north = 0;
+	MapView mapView;
+	Graph graph;
 	
 	//FLAG FOR WHETHER A STEP WAS MADE OR NOT
 
@@ -47,8 +61,8 @@ public class MainActivity extends Activity implements SensorEventListener{
 		
 		String fileName = Environment.getExternalStorageDirectory()
 				.getPath() + "/pathfinder_image.jpg";
-		ImageProcessor.process(Highgui.imread(fileName));
-		MapView mapView = (MapView) findViewById(R.id.mapView);
+		graph = ImageProcessor.process(Highgui.imread(fileName));
+		mapView = (MapView) findViewById(R.id.mapView);
 		mapView.loadImage(fileName);
 		
 		Log.i("SENSOR", "Begin detecting");
@@ -61,6 +75,8 @@ public class MainActivity extends Activity implements SensorEventListener{
 		for(Sensor sensor : mSensorList){
 			mSensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_FASTEST);
 		}
+		Toast.makeText(this, "Please select your current location", Toast.LENGTH_SHORT).show();
+		calibrate = true;
 		
 	}
 
@@ -167,14 +183,35 @@ public class MainActivity extends Activity implements SensorEventListener{
 		return orient[0];
 	}
 	
+	
+	private void setNorth(double x, double y, double angle){
+		north = Math.atan(y/x) - angle;
+	}
+	
+	
 	private void doStep(){
-		float azimuth = averageAzimuth();
-		double threshold = 3.14/18;
-		if(Math.abs(azimuth - prevAzimuth) > threshold){
-			prevAzimuth = azimuth; 
+		if(calibrating){ //If calibrating steps...
+			numSteps++;
+		} else {
+			float azimuth = averageAzimuth();
+			double threshold = 3.14/18;
+			if(Math.abs(azimuth - prevAzimuth) > threshold){
+				prevAzimuth = azimuth; 
+			}
+			double angle = prevAzimuth + north;
+			float x = (float)(avgStride*Math.cos(angle) + mapView.points.get(mapView.points.size() - 1).getLoc().getLatitude());
+			float y = (float)(avgStride*Math.sin(angle) + mapView.points.get(mapView.points.size() - 1).getLoc().getLongitude());
+			mapView.placePoint(x, y);
+			float thresh = 3;
+			Pair<Vertex, Double> dat = graph.closestVertexToPath(new Loc((double)x, (double)y));
+			if(dat.getRight() > thresh*avgStride){
+				try{
+					graph.computePathToGraph(new Loc((double)x, (double)y), mapView.dst);
+				} catch (GraphException g){
+					Toast.makeText(this, "Invalid location", Toast.LENGTH_SHORT).show();
+				}
+			}
 		}
-		//do some sort of draw
-		//Check if off path. If so, recompute
 	}
 	
 	private float averageAzimuth(){
