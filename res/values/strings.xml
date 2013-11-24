@@ -8,4 +8,6 @@
     <string name="step_service_stopped">Step Counter Deactivated</string>
 	<string name="step_service_connected">Step counter service Connected</string>
 	<string name="step_service_disconnected">Step counter service Disconnected</string>
+	<string name="count">Counter</string>
+	<string name="reset">Reset</string>
 </resources>
