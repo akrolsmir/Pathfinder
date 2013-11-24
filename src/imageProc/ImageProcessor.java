@@ -9,6 +9,7 @@ import org.opencv.imgproc.Imgproc;
 
 import com.pathfinder.graph.Graph;
 import com.pathfinder.graph.Vertex;
+import com.pathfinder.graph.exception.VertexNotInGraphException;
 
 public class ImageProcessor {
 	static int low_thresh = 0;
@@ -53,7 +54,12 @@ public class ImageProcessor {
 				g.addVertex(v2);
 			}
 			v1 = vertices.get(pixel1); v2 = vertices.get(pixel2);
-			g.addEdge(v1, v2, dist(pixel1, pixel2));
+			try {
+				g.addEdge(v1, v2, dist(pixel1, pixel2));
+			} catch (VertexNotInGraphException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 		}
 		
