@@ -20,7 +20,6 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 public class CameraActivity extends Activity implements CvCameraViewListener2,
 		OnTouchListener {
@@ -103,17 +102,11 @@ public class CameraActivity extends Activity implements CvCameraViewListener2,
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 		if (!pictureTaken) {
-			Log.i(TAG, "[CAMERA] onTouch");
-			// SimpleDateFormat sdf = new
-			// SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
-			// String currentDateandTime = sdf.format(new Date());
+			Log.i(TAG, "[CAMERA] taking picture");
 			String basePath = Environment.getExternalStorageDirectory().getPath();
 			mOpenCvCameraView.takePicture(basePath + "/pathfinder_intermediate.jpg", basePath + "/pathfinder_image.jpg");
-			// Toast.makeText(this, fileName + " saved", Toast.LENGTH_SHORT).show();
 			pictureTaken = true;
-			
-//			processImage(fileName);
-			
+			// processImage(basePath + "/pathfinder_image.jpg");
 		}
 		return false;
 	}

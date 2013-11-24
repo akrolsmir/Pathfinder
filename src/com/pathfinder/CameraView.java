@@ -1,7 +1,6 @@
 package com.pathfinder;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -18,7 +17,6 @@ import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.media.ExifInterface;
 import android.net.Uri;
-import android.os.Environment;
 import android.provider.MediaStore.Images;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -79,7 +77,7 @@ public class CameraView extends JavaCameraView implements PictureCallback {
         mCamera.setDisplayOrientation(360 - degrees);
     }
     
-    public Bitmap getImage1(String path) throws IOException
+    private Bitmap getImage1(String path) throws IOException
     {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
@@ -122,7 +120,7 @@ public class CameraView extends JavaCameraView implements PictureCallback {
     }   
 
 
-    public  float rotationForImage(Context context, Uri uri) {
+    private float rotationForImage(Context context, Uri uri) {
         if (uri.getScheme().equals("content")) {
             String[] projection = { Images.ImageColumns.ORIENTATION };
             Cursor c = context.getContentResolver().query(
